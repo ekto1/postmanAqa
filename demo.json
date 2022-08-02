@@ -1,36 +1,36 @@
 {
 	"info": {
-		"_postman_id": "34761d1c-2343-4b71-b013-8104f13c999d",
-		"name": "vinunja",
+		"_postman_id": "18646457-67fa-40d4-b330-406f75bccc79",
+		"name": "vikunja",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "21723972"
+		"_exporter_id": "2176834"
 	},
 	"item": [
 		{
-			"name": "post",
+			"name": "post /login",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
 							"pm.test(\"Status code is 200\", function () {",
-							"    ",
-							"    //Получить хедер из запроса и записать его в переменную",
-							"    /*",
-							"    let post_raw = JSON.parse(request.data);",
-							"    let post_form_data = request.data",
-							"    let get_params = pm.request.url.query.toObject()",
-							"    */",
-							"    //const response = ",
-							"    JSON.parse(responseBody).token;",
-							"    console.log('response');",
-							"   //console.log(response.token);",
-							"    console.log(JSON.parse(responseBody).token);",
 							"",
-							"//Записать токен в переменные глобал",
+							"     // Получить хедер из запроса и записать его в переменную",
+							" const response = JSON.parse(responseBody);",
+							"  console.log('response');",
+							" console.log(response.token);",
+							"",
+							"    // Записать токен в переменные global",
 							"pm.globals.set('tokenVikunja', response.token);",
+							"/*",
+							"// Записать токен вариант 2",
+							"pm.environment.set('tokenChallenge2',pm.response.headers.get(\"X-Challenger\"));",
+							"*/",
+							"const a = pm.response.json();",
+							"console.log(a);",
 							"",
-							"pm.response.to.have.status(200);",
+							"    pm.response.to.have.status(200);",
+							"",
 							"});"
 						],
 						"type": "text/javascript"
@@ -42,7 +42,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"username\":\"demo\",\n    \"password\":\"demo\",\n    \"long_token\":false\n    }",
+					"raw": "{\n    \"username\": \"demo\",\n    \"password\": \"demo\",\n    \"long_token\": false\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -67,21 +67,14 @@
 			"response": []
 		},
 		{
-			"name": "New Request",
+			"name": "post /register",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Status code is 201\", function () {",
-							"    pm.response.to.have.status(201);",
-							"});",
-							"let name_from_body = JSON.parse(request.data);",
-							"let name_from_server = pm.response.json();",
-							"pm.test(\"name_from_body = name_from_server\", function () {",
-							"pm.expect(name_from_body.name).to.eql(name_from_server.name);",
-							"console.log(name_from_body.name)",
-							"console.log(name_from_server.name)",
+							"pm.test(\"Response time is less than 1000ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -89,21 +82,11 @@
 				}
 			],
 			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IiIsImVtYWlsUmVtaW5kZXJzRW5hYmxlZCI6ZmFsc2UsImV4cCI6MTY1OTQ0ODE3NCwiaWQiOjEsImlzTG9jYWxVc2VyIjp0cnVlLCJsb25nIjpmYWxzZSwibmFtZSI6IiIsInR5cGUiOjEsInVzZXJuYW1lIjoiZGVtbyJ9.Oxkr6Dv2MuarSsP6EBCln8lPR7Nnn2-RtIHw6Ysb9bc",
-							"type": "string"
-						}
-					]
-				},
-				"method": "PUT",
+				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"max_right\":null,\"id\":0,\"name\":\"Game2\",\"description\":\"\",\"members\":[],\"right\":0,\"created_by\":{\"max_right\":null,\"id\":0,\"email\":\"\",\"username\":\"\",\"name\":\"\",\"created\":\"1970-01-01T00:00:00.000Z\",\"updated\":\"1970-01-01T00:00:00.000Z\",\"settings\":null},\"created\":\"1970-01-01T00:00:00.000Z\",\"updated\":\"1970-01-01T00:00:00.000Z\"}",
+					"raw": "{\n    \"username\": \"{{$randomUserName}}\",\n    \"email\": \"{{$randomEmail}}\",\n    \"password\": \"{{$randomPassword}}\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -111,7 +94,7 @@
 					}
 				},
 				"url": {
-					"raw": "https://try.vikunja.io/api/v1/teams",
+					"raw": "https://try.vikunja.io/api/v1/register",
 					"protocol": "https",
 					"host": [
 						"try",
@@ -121,7 +104,7 @@
 					"path": [
 						"api",
 						"v1",
-						"teams"
+						"register"
 					]
 				}
 			},
